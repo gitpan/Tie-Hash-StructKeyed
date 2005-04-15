@@ -1,0 +1,18 @@
+--- #YAML:1.0
+name: Tie-Hash-StructKeyed
+version: 0.03
+author:
+  - osfameron - osfameron@cpan.org
+abstract: |-
+  use structures like hashes and arrays as keys to a hash
+license: perl
+requires:
+  YAML: 0
+  perl: 5.6.1
+build_requires:
+  Test::More: 0
+provides:
+  Tie::Hash::StructKeyed:
+    file: lib/Tie/Hash/StructKeyed.pm
+    version: 0.03
+generated_by: Module::Build version 0.2609

@@ -1,4 +1,5 @@
 Build.PL
+Changes
 lib/Tie/Hash/StructKeyed.pm
 MANIFEST			This list of files
 META.yml

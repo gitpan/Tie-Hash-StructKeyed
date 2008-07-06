@@ -10,7 +10,7 @@ SYNOPSIS
 
        my $h = { one=>1, two=>2 };
        $hash{$h}      = 'Keyed by hashref';
-    
+
 DESCRIPTION
     Tie::Hash::StructKeyed ties a hash so that you can use arrays, hashes or
     complex structures as the key of the hash.

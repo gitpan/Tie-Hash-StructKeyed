@@ -1,6 +1,7 @@
 use strict; use warnings;
 use Test::More tests => 16;
 use Tie::Hash::StructKeyed;
+use Data::Dumper;
 
 # hakim@fotango.com 13 April 2005
 
@@ -38,28 +39,50 @@ $hash{['foo','bar','baz']} =   "FooBarBaz";
 is($hash{['foo','bar','baz']}, 'FooBarBaz', 
     '[subscripted key] works');
 
-my @keys = keys %hash;
-is_deeply(\@keys, [ 
-          [
-            'UK',
-            'German'
-          ],
+sub by_keys {
+    my ($l, $r) = @_;
+
+    no warnings 'uninitialized';
+
+    return -1 unless defined $l;
+    return  1 unless defined $r;
+    if (! ref $l) {
+        return -1 if ref $r;
+        return $l cmp $r;
+    } elsif (!ref $r) {
+        return 1;
+    }
+    my @l = @$l or return -1;
+    my @r = @$r or return  1;
+
+    my ($l1, $r1) = ((shift @l), (shift @r));
+    if (my $cmp = $l1 cmp $r1) { return $cmp }
+
+    return by_keys( @l ? \@l : undef, @r ? \@r : undef );
+}
+
+my @keys = sort { by_keys($a,$b) } keys %hash;
+
+is_deeply(\@keys, [
           'bar',
-          [
-            'DE',
-            'German'
-          ],
-          [
-            'DE',
-            'English'
-          ],
-          [
-            'UK',
-            'English'
-          ],
           'foo',
           [
-            'wobble',
+            'DE',
+            'English'
+          ],
+          [
+            'DE',
+            'German'
+          ],
+          [
+            'UK',
+            'English'
+          ],
+          [
+            'UK',
+            'German'
+          ],
+          [
             'foo',
             'bar',
             'baz'
@@ -71,12 +94,13 @@ is_deeply(\@keys, [
             'baz'
           ],
           [
+            'wobble',
             'foo',
             'bar',
             'baz'
-          ]
+          ],
     ],
-    'Keys returned (in order expected by my machine - I guess this is not a good test though...)');
+    'Keys returned') or diag Dumper(\@keys);
 
 $hash{ {anon => [1, {complex => 2}]} } = 'complex1';
 $hash{ ['list', { foo => 'bar'}] }     = 'complex2';

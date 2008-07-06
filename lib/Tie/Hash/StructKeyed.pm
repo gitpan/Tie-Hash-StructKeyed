@@ -6,7 +6,7 @@ use strict; use warnings;
 use Tie::Hash;
 use YAML;
 
-our $VERSION       = "0.03";
+our $VERSION       = "0.04";
 our @ISA           = qw (Tie::Hash);
 
 =head1 NAME
